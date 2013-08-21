@@ -72,7 +72,6 @@ module.exports = function (grunt) {
 
                 contents = contents.replace(globalVarRegExps[globalVarName], globalVars[globalVarName]);
             });
-
             return contents;
         }
 
@@ -112,7 +111,11 @@ module.exports = function (grunt) {
                     includeContents = options.processIncludeContents(includeContents, localVars);
                 }
 
-                contents = contents.replace(match, includeContents);
+                var scriptId = /(.*)\.[^.]+$/.exec(matches[1])[1];
+                var tagStart = '<script type="text/html" id="' + scriptId + '">\n';
+                var tagEnd = '\n</script>';
+
+                contents = contents.replace(match, tagStart + includeContents + tagEnd);
 
                 matches = includeRegExp.exec(contents);
             }
